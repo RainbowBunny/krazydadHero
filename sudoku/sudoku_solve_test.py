@@ -1,6 +1,6 @@
 import unittest
-import sudoku_solve 
-from sudoku_solve import SudokuSolve
+import sudoku.sudoku_solve as sudoku_solve 
+from sudoku.sudoku_solve import SudokuSolve
 import gurobipy as gp
 from gurobipy import GRB
 import numpy as np
@@ -22,5 +22,7 @@ class TestSudokuSolve(unittest.TestCase):
         print(sudokuSolve.sudokuMatrix)
         sudokuSolve.solve()
         print(sudokuSolve.sudokuMatrix)
-    
-
+    def testPotato(self):
+        #đọc matrix từ potato
+        for i in range(8):
+            
