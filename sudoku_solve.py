@@ -10,14 +10,15 @@ class SudokuSolve:
         self.model.setParam('OutputFlag', False)
     
     def createVariables(self):
-        self.x = [[[self.model.addVars(vtype=GRB.BINARY, name="x_{}_{}_{}".format(i, j, k))
+        self.x = [[[self.model.addVar(vtype=GRB.BINARY, name="x_{}_{}_{}".format(i, j, k))
                      for k in range(10)] for j in range(9)]
                         for i in range(9)]
-    def cellHasValue(self, i, j, k):
+    def cellHasValue(self):
         for i in range(9):
             for j in range(9):
-                self.model.addConstr(self.x[i][j][k] == 0)
-                if self.sudokuMatrix[i][j] == k:
+                self.model.addConstr(self.x[i][j][0] == 0)
+                k = int(self.sudokuMatrix[i][j])
+                if(k!=0):
                     self.model.addConstr(self.x[i][j][k] == 1)
     def oneCellOneValue(self):
         for i in range(9):
@@ -26,14 +27,21 @@ class SudokuSolve:
                 self.model.addConstr(sum(allValues) == 1)
     def setRow(self):
         for i in range(9):
-            allValues = [self.x[i][j][k] for j in range(9)
-                          for k in range(1, 10)]
-            self.model.addConstr(sum(allValues) == 9)
+            for k in range(1, 10):
+                allValues = [self.x[i][j][k] for j in range(9)]
+                self.model.addConstr(sum(allValues) == 1)
     def setColumn(self):
         for j in range(9):
-            allValues = [self.x[i][j][k] for i in range(9)
-                          for k in range(1, 10)]
-            self.model.addConstr(sum(allValues) == 9)
+            for k in range(1, 10):
+                allValues = [self.x[i][j][k] for i in range(9)]
+                self.model.addConstr(sum(allValues) == 1)
+    def setBlock(self):
+        for i in range(3):
+            for j in range(3):
+                for k in range(1, 10):
+                    allValues = [self.x[3*i + a][3*j + b][k] 
+                                 for a in range(3) for b in range(3)]
+                    self.model.addConstr(sum(allValues) == 1)
     def setObjective(self):
         self.model.setObjective(1,  GRB.MINIMIZE)
     def getSolution(self):
@@ -48,6 +56,7 @@ class SudokuSolve:
         self.oneCellOneValue()
         self.setRow()
         self.setColumn()
+        self.setBlock()
 
     def solve(self):
         self.createVariables()
