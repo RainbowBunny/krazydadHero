@@ -1,0 +1,4 @@
+gurobipy
+camelot-py
+opencv-python
+ghostscript
