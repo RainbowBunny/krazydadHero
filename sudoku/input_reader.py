@@ -29,4 +29,4 @@ if __name__ == '__main__':
     file = 'KD_Sudoku_EZ_8_v1.pdf'
     outfile = 'potato.txt'
     print(read_file(outfile, 8))
-    # create_board(file, outfile)
+    create_board(file, outfile)

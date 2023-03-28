@@ -1,9 +1,11 @@
 import unittest
-import sudoku.sudoku_solve as sudoku_solve 
-from sudoku.sudoku_solve import SudokuSolve
+import sudoku_solve as sudoku_solve 
+from sudoku_solve import SudokuSolve
 import gurobipy as gp
 from gurobipy import GRB
 import numpy as np
+
+from input_reader import read_file
 
 class TestSudokuSolve(unittest.TestCase):
     def test1(self):
@@ -22,7 +24,17 @@ class TestSudokuSolve(unittest.TestCase):
         print(sudokuSolve.sudokuMatrix)
         sudokuSolve.solve()
         print(sudokuSolve.sudokuMatrix)
-    def testPotato(self):
+    def testPotato(self, filename, numberOfTest):
         #đọc matrix từ potato
-        for i in range(8):
+        data = read_file(filename, numberOfTest)
+        for i in range(numberOfTest):
+            print(f'Test Case no.{i}')
+            sudokuNumpy = np.array(data[i])
+            sudokuSolve = SudokuSolve(sudokuNumpy)
+            print(sudokuSolve.sudokuMatrix)
+            sudokuSolve.solve()
+            print(sudokuSolve.sudokuMatrix)  
             
+if __name__ == '__main__':
+    solver = TestSudokuSolve()
+    solver.testPotato('potato.txt', 8)
