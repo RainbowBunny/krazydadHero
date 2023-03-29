@@ -51,6 +51,7 @@ class SudokuSolve:
         self.model.setObjective(1,  GRB.MINIMIZE)
 
     def getSolution(self):
+        
         for i in range(9):
             for j in range(9):
                 for k in range(1, 10):
